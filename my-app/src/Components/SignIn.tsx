@@ -1,27 +1,58 @@
-import "../App.css";
-import { Link } from "react-router-dom";
-
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 const SignIn: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSignIn = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) navigate("/user");
+  });
+
   return (
     <div>
       <Link to="/">
         <button className="back-btn">Go back</button>
       </Link>
       <div className="containerSignIn">
-        <form action="index.html" method="post">
+        <section>
           <h1 className="heading">Sign In</h1>
 
           <fieldset className="info">
             <label htmlFor="email">Email:</label>
-            <input type="email" name="user_email" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
             <label htmlFor="password">Password:</label>
-            <input type="password" name="user_password" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </fieldset>
-          <button className="signBtn" type="submit">
+          <button onClick={handleSignIn} className="signBtn" type="submit">
             Sign In
           </button>
-        </form>
+          <span>
+            Dont have an account?
+            <Link to="/sign_Up"> Sign up</Link>
+          </span>
+        </section>
       </div>
     </div>
   );

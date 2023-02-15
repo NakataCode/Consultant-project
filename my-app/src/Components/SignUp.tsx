@@ -1,25 +1,55 @@
 import "../App.css";
-import { Link } from "react-router-dom";
+import {
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+} from "firebase/auth";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
 const SignUp: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+
+  const handleSignUp = async () => {
+    try {
+      await createUserWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) navigate("/user");
+  });
+
+  onAuthStateChanged(auth, (currentUser) => {
+    if (currentUser) navigate("/user");
+  });
+
   return (
     <div>
       <Link to="/">
         <button className="back-btn">Go back</button>
       </Link>
       <div className="container">
-        <form action="" method="post">
+        <section>
           <h1 className="heading">Sign Up</h1>
 
           <fieldset className="info">
-            <label htmlFor="name">Username:</label>
-            <input type="text" name="user_name" />
-
             <label htmlFor="email">Email:</label>
-            <input type="email" name="user_email" />
+            <input
+              type="email"
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
 
             <label htmlFor="password">Password:</label>
-            <input type="password" name="user_password" />
+            <input
+              type="password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </fieldset>
 
           <fieldset className="options">
@@ -37,10 +67,14 @@ const SignUp: React.FC = () => {
             </label>
           </fieldset>
 
-          <button className="signBtn" type="submit">
+          <button onClick={handleSignUp} className="signBtn" type="submit">
             Sign Up
           </button>
-        </form>
+          <span>
+            Alreday have an account?
+            <Link to="/sign_In"> Sign in</Link>
+          </span>
+        </section>
       </div>
     </div>
   );
