@@ -15,9 +15,8 @@ const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
   onAuthStateChanged(auth, (currentUser) => {
-    if (currentUser) navigate("/user");
+    if (currentUser) navigate("/Home_Page");
   });
-
   const handleSignUp = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -25,12 +24,14 @@ const SignUp: React.FC = () => {
         email,
         password
       );
+      localStorage.setItem("userEmail", userCredential.user?.email || "");
+
       const user = userCredential.user;
       await updateProfile(user, {
         displayName: JSON.stringify({ email, userType }),
       });
 
-      navigate("/user");
+      navigate("/Home_Page");
     } catch (error) {
       console.log(error);
     }
