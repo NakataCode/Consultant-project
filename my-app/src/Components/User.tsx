@@ -6,6 +6,7 @@ import "../App.css";
 
 interface CustomUser {
   email: string | null;
+  displayName: string | null;
 }
 const User: React.FC = () => {
   const [user, setUser] = useState<CustomUser | null>(null);
@@ -15,9 +16,13 @@ const User: React.FC = () => {
     if (currentUser) setUser(currentUser);
     else navigate("/sign_In");
   });
+
+  const userType = user?.displayName && JSON.parse(user.displayName).userType;
+
   return (
     <div className="center-container">
       <h2 className="welcome">User: {user?.email}</h2>
+      {userType && <h3 className="welcome">User Type: {userType}</h3>}
       <button className="signOutBtn" onClick={() => signOut(auth)}>
         Sign Out
       </button>
