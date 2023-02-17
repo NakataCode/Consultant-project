@@ -9,14 +9,19 @@ const SignIn: React.FC = () => {
 
   const handleSignIn = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      localStorage.setItem("userEmail", userCredential.user?.email || "");
     } catch (err) {
       console.log(err);
     }
   };
 
   onAuthStateChanged(auth, (currentUser) => {
-    if (currentUser) navigate("/user");
+    if (currentUser) navigate("/Home_Page");
   });
 
   return (
