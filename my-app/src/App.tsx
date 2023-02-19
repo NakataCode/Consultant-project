@@ -4,6 +4,7 @@ import SignIn from "./Components/SignIn";
 import SignUp from "./Components/SignUp";
 import User from "./Components/User";
 import AfterHome from "./Components/AfterHome";
+import AdvertisementForm from "./Components/Advertisement";
 
 import {
   createBrowserRouter,
@@ -18,8 +19,9 @@ const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="sign_In" element={<SignIn />} />
       <Route path="sign_Up" element={<SignUp />} />
-      <Route path="/user" element={<User />} />
-      <Route path="/Home_Page" element={<AfterHome />} />
+      <Route path="user" element={<User />} />
+      <Route path="Home_Page" element={<AfterHome />} />
+      <Route path="Advertisement_Form" element={<AdvertisementForm />} />
     </Route>
   )
 );

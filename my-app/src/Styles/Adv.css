@@ -1,0 +1,60 @@
+h2 {
+  color: white;
+}
+.ad-form-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+  color: white;
+}
+
+.ad-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  max-width: 800px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.ad-form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 1rem;
+}
+
+.ad-form input[type="text"],
+.ad-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.ad-form input[type="file"] {
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.ad-form button[type="submit"],
+.go-back {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.ad-form button[type="submit"]:hover {
+  background-color: #3e8e41;
+}

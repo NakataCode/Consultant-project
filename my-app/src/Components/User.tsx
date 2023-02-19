@@ -23,6 +23,12 @@ const User: React.FC = () => {
     <div className="center-container">
       <h2 className="welcome">User: {user?.email}</h2>
       {userType && <h3 className="welcome">User Type: {userType}</h3>}
+      <h3
+        className="welcome linkUser"
+        onClick={() => navigate("/Advertisement_Form")}
+      >
+        Create advertisement
+      </h3>
       <button className="signOutBtn" onClick={() => signOut(auth)}>
         Sign Out
       </button>
