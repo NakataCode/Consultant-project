@@ -38,6 +38,7 @@ const SignIn: React.FC = () => {
             <input
               type="email"
               value={email}
+              className="email"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -45,6 +46,7 @@ const SignIn: React.FC = () => {
             <label htmlFor="password">Password:</label>
             <input
               type="password"
+              className="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

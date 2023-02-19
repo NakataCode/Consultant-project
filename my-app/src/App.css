@@ -135,9 +135,23 @@ section {
   text-align: center;
 }
 
+.email,
+.password {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  font-size: 16px;
+  height: auto;
+  margin: 0;
+  outline: 0;
+  padding: 15px;
+  width: 100%;
+  background-color: #e8eeef;
+  color: #8a97a0;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03) inset;
+  margin-bottom: 30px;
+}
+
 input[type="text"],
-input[type="password"],
-input[type="email"],
 textarea,
 select {
   background: rgba(255, 255, 255, 0.1);
@@ -233,4 +247,15 @@ input[type="checkbox"] {
 }
 .linkUser {
   cursor: pointer;
+}
+.search {
+  height: 100%;
+  width: 100%;
+  background: transparent;
+  border: 1px solid black;
+  background: #fff;
+  padding: 0.5em 0.5em;
+  font-size: 0.9em;
+  color: #666;
+  border-radius: 34px;
 }

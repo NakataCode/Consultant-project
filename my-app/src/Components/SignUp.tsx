@@ -50,6 +50,7 @@ const SignUp: React.FC = () => {
             <label htmlFor="email">Email:</label>
             <input
               type="email"
+              className="email"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
@@ -57,6 +58,7 @@ const SignUp: React.FC = () => {
             <label htmlFor="password">Password:</label>
             <input
               type="password"
+              className="password"
               onChange={(e) => setPassword(e.target.value)}
               required
             />
@@ -69,6 +71,7 @@ const SignUp: React.FC = () => {
               <input
                 type="checkbox"
                 id="consultant"
+                className="checkbox"
                 value="Consultant"
                 checked={userType === "Consultant"}
                 onChange={(e) =>
@@ -83,6 +86,7 @@ const SignUp: React.FC = () => {
               <input
                 type="checkbox"
                 id="help"
+                className="checkbox"
                 value="Help"
                 checked={userType === "Person who needs help"}
                 onChange={(e) =>
