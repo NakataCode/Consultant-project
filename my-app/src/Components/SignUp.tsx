@@ -12,6 +12,8 @@ const SignUp: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [userType, setUserType] = useState("");
+  const [needsHelp, setNeedsHelp] = useState(false);
+
   const navigate = useNavigate();
 
   onAuthStateChanged(auth, (currentUser) => {
@@ -28,7 +30,7 @@ const SignUp: React.FC = () => {
 
       const user = userCredential.user;
       await updateProfile(user, {
-        displayName: JSON.stringify({ email, userType }),
+        displayName: JSON.stringify({ email, userType, needsHelp }),
       });
 
       navigate("/Home_Page");
@@ -89,9 +91,10 @@ const SignUp: React.FC = () => {
                 className="checkbox"
                 value="Help"
                 checked={userType === "Person who needs help"}
-                onChange={(e) =>
-                  setUserType(e.target.checked ? "Person who needs help" : "")
-                }
+                onChange={(e) => {
+                  setUserType(e.target.checked ? "Person who needs help" : "");
+                  setNeedsHelp(e.target.checked);
+                }}
               />
               Person who needs help
             </label>
