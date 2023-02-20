@@ -20,18 +20,23 @@ const User: React.FC = () => {
   const userType = user?.displayName && JSON.parse(user.displayName).userType;
 
   return (
-    <div className="center-container">
-      <h2 className="welcome">User: {user?.email}</h2>
-      {userType && <h3 className="welcome">User Type: {userType}</h3>}
-      <h3
-        className="welcome linkUser"
-        onClick={() => navigate("/Advertisement_Form")}
-      >
-        Create advertisement
-      </h3>
-      <button className="signOutBtn" onClick={() => signOut(auth)}>
-        Sign Out
+    <div>
+      <button className="go-back" onClick={() => navigate("/Home_Page")}>
+        Go back
       </button>
+      <div className="center-container">
+        <h2 className="welcome">User: {user?.email}</h2>
+        {userType && <h3 className="welcome">User Type: {userType}</h3>}
+        <h3
+          className="welcome linkUser"
+          onClick={() => navigate("/Advertisement_Form")}
+        >
+          Create advertisement
+        </h3>
+        <button className="signOutBtn" onClick={() => signOut(auth)}>
+          Sign Out
+        </button>
+      </div>
     </div>
   );
 };

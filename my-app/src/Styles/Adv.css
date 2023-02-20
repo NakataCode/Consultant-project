@@ -58,3 +58,10 @@ h2 {
 .ad-form button[type="submit"]:hover {
   background-color: #3e8e41;
 }
+.title,
+.description,
+.date,
+.image,
+.budget {
+  text-align: center;
+}
