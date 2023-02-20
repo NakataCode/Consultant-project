@@ -29,14 +29,7 @@ const HomePage: React.FC = () => {
         <h1 className="logo">
           <NavLink to="/Home_Page">-Consultant-</NavLink>
         </h1>
-        <form className="search-form" onSubmit={handleSearch}>
-          <input
-            placeholder="Search"
-            className="search"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-          />
-        </form>
+
         <ul className="navLinks">
           <li>
             {userEmail && (
@@ -47,6 +40,17 @@ const HomePage: React.FC = () => {
           </li>
         </ul>
       </header>
+      <div className="flex-2">
+        <form className="search-form form-container " onSubmit={handleSearch}>
+          <input
+            placeholder="Search"
+            className="search"
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
+          />
+        </form>
+        <hr></hr>
+      </div>
     </div>
   );
 };

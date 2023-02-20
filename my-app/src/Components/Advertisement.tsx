@@ -91,23 +91,23 @@ const CreateAd: React.FC = () => {
         <h2>Create Advertisement:</h2>
         <form className="ad-form" onSubmit={handleSubmit}>
           <div className="form-field">
-            <label>Title:</label>
+            <label className="title">Title:</label>
             <input type="text" value={title} onChange={handleTitleChange} />
           </div>
           <div className="form-field">
-            <label>Description:</label>
+            <label className="description">Description:</label>
             <textarea value={description} onChange={handleDescriptionChange} />
           </div>
           <div className="form-field">
-            <label>Image:</label>
+            <label className="image">Image:</label>
             <input type="file" onChange={handleImageChange} />
           </div>
           <div className="form-field">
-            <label>Date:</label>
+            <label className="date">Date:</label>
             <input type="date" value={date} onChange={handleDateChange} />
           </div>
           <div className="form-field">
-            <label>Budget:</label>
+            <label className="budget">Budget:</label>
             <input type="number" value={budget} onChange={handleBudgetChange} />
           </div>
           <button onClick={handleSubmit} type="submit">
