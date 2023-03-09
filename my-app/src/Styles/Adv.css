@@ -65,3 +65,56 @@ h2 {
 .budget {
   text-align: center;
 }
+
+.adv-submit-btn {
+  margin-top: 0.9em;
+}
+
+.user {
+  color: white;
+}
+.user-bottom-space {
+  margin-bottom: 0.5em;
+}
+.adv-img {
+  width: 17rem;
+  height: auto;
+  border-radius: 4%;
+}
+
+.adv-container {
+  margin: 0.7em 0.7em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  max-width: 800px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+.adv {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 1150px) {
+  .adv-container {
+    width: 35%;
+  }
+}
+@media only screen and (max-width: 830px) {
+  .adv {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .adv-container {
+    width: 70%;
+  }
+}
