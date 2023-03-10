@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import "../App.css";
+import AdvDisplay from "./AdvDisplay";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
+import { AdvertisementData } from "./AdvertFormInputs";
+import "../Styles/Adv.css";
 
-const HomePage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+const AfterHome: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [advertisements, setAdvertisements] = useState<AdvertisementData[]>([]);
 
   const navigate = useNavigate();
-
-  const handleSearch = (event: React.FormEvent) => {
-    event.preventDefault();
-  };
 
   const handleUserClick = () => {
     navigate("/user");
@@ -21,6 +21,15 @@ const HomePage: React.FC = () => {
     if (email) {
       setUserEmail(email);
     }
+  }, [userEmail]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "ads"), (snapshot) => {
+      const ads = snapshot.docs.map((doc) => doc.data() as AdvertisementData);
+      setAdvertisements(ads);
+    });
+
+    return unsubscribe;
   }, []);
 
   return (
@@ -41,18 +50,20 @@ const HomePage: React.FC = () => {
         </ul>
       </header>
       <div className="flex-2">
-        <form className="search-form form-container " onSubmit={handleSearch}>
-          <input
-            placeholder="Search"
-            className="search"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-          />
+        <form className="search-form form-container">
+          <input placeholder="Search" className="search" />
         </form>
         <hr></hr>
       </div>
+      <div className="adv">
+        {advertisements &&
+          advertisements.map((ad: AdvertisementData, index: number) => (
+            <AdvDisplay key={index} ads={ad} />
+          ))}
+      </div>
+      <hr></hr>
     </div>
   );
 };
 
-export default HomePage;
+export default AfterHome;

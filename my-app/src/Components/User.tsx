@@ -3,11 +3,8 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import "../App.css";
+import { CustomUser } from "./DisplayedUserData";
 
-interface CustomUser {
-  email: string | null;
-  displayName: string | null;
-}
 const User: React.FC = () => {
   const [user, setUser] = useState<CustomUser | null>(null);
   const navigate = useNavigate();
