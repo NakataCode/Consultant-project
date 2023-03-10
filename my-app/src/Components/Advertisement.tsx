@@ -1,16 +1,18 @@
-import React, { useState } from "react";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { collection, addDoc } from "firebase/firestore";
+import { ref, uploadBytes } from "firebase/storage";
 import { getDownloadURL } from "firebase/storage";
+import { useNavigate } from "react-router-dom";
+import { db, storage } from "../firebase";
+import { auth } from "../firebase";
 import "../Styles/Adv.css";
 
-const CreateAd: React.FC = () => {
+const Advertisement: React.FC = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [images, setImages] = useState<File[]>([]);
-  const [date, setDate] = useState("");
   const [budget, setBudget] = useState("");
+  const [date, setDate] = useState("");
+  const [images, setImages] = useState<File[]>([]);
   const navigate = useNavigate();
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,63 +25,54 @@ const CreateAd: React.FC = () => {
     setDescription(event.target.value);
   };
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = event.target.files;
-    if (fileList) {
-      setImages(Array.from(fileList));
-    }
+  const handleBudgetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBudget(event.target.value);
   };
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
   };
 
-  const handleBudgetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBudget(event.target.value);
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      setImages(Array.from(event.target.files));
+    }
   };
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    if (
-      title.trim() === "" ||
-      description.trim() === "" ||
-      images.length === 0 ||
-      date.trim() === "" ||
-      budget.trim() === ""
-    ) {
-      alert("Please fill in all required fields.");
-      return;
+    try {
+      const imageRefs: string[] = [];
+      for (const image of images) {
+        const storageRef = ref(storage, `images/${image.name}`);
+        await uploadBytes(storageRef, image);
+        const imageUrl = await getDownloadURL(storageRef);
+        imageRefs.push(imageUrl);
+      }
+
+      const adRef = collection(db, "ads");
+      const newAd = {
+        title,
+        description,
+        budget,
+        date,
+        images: imageRefs,
+        createdBy: auth.currentUser?.email,
+      };
+
+      await addDoc(adRef, newAd);
+
+      navigate("/Home_Page");
+
+      setTitle("");
+      setDescription("");
+      setBudget("");
+      setDate("");
+      setImages([]);
+    } catch (err) {
+      console.error(err);
     }
-
-    const storage = getStorage();
-    const firestore = getFirestore();
-
-    const imageUrls: string[] = [];
-
-    for (let i = 0; i < images.length; i++) {
-      const image = images[i];
-      const storageRef = ref(storage, `images/${image.name}`);
-      await uploadBytes(storageRef, image);
-      const imageUrl = await getDownloadURL(storageRef);
-      imageUrls.push(imageUrl);
-    }
-
-    const adData = {
-      title,
-      description,
-      images: imageUrls,
-      date,
-      budget,
-    };
-
-    await addDoc(collection(firestore, "ads"), adData);
-
-    setTitle("");
-    setDescription("");
-    setImages([]);
-    setDate("");
-    setBudget("");
   };
 
   return (
@@ -92,25 +85,44 @@ const CreateAd: React.FC = () => {
         <form className="ad-form" onSubmit={handleSubmit}>
           <div className="form-field">
             <label className="title">Title:</label>
-            <input type="text" value={title} onChange={handleTitleChange} />
+            <input
+              type="text"
+              value={title}
+              onChange={handleTitleChange}
+              required
+            />
           </div>
           <div className="form-field">
             <label className="description">Description:</label>
-            <textarea value={description} onChange={handleDescriptionChange} />
+            <textarea
+              value={description}
+              onChange={handleDescriptionChange}
+              required
+            />
           </div>
           <div className="form-field">
             <label className="image">Image:</label>
-            <input type="file" onChange={handleImageChange} />
+            <input type="file" onChange={handleImageChange} required />
           </div>
           <div className="form-field">
             <label className="date">Date:</label>
-            <input type="date" value={date} onChange={handleDateChange} />
+            <input
+              type="date"
+              value={date}
+              onChange={handleDateChange}
+              required
+            />
           </div>
           <div className="form-field">
             <label className="budget">Budget:</label>
-            <input type="number" value={budget} onChange={handleBudgetChange} />
+            <input
+              type="number"
+              value={budget}
+              onChange={handleBudgetChange}
+              required
+            />
           </div>
-          <button onClick={handleSubmit} type="submit">
+          <button className="adv-submit-btn" type="submit">
             Create
           </button>
         </form>
@@ -119,4 +131,4 @@ const CreateAd: React.FC = () => {
   );
 };
 
-export default CreateAd;
+export default Advertisement;
