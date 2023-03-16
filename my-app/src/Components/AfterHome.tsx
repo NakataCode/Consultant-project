@@ -1,14 +1,16 @@
-import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { AdvertisementData } from "./AdvertFormInputs";
 import AdvDisplay from "./AdvDisplay";
+import { CustomUser } from "./DisplayedUserData";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
-import { AdvertisementData } from "./AdvertFormInputs";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../Styles/Adv.css";
+import { useState, useEffect } from "react";
 
 const AfterHome: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [advertisements, setAdvertisements] = useState<AdvertisementData[]>([]);
+  const [userType, setUserType] = useState<CustomUser | []>([]);
 
   const navigate = useNavigate();
 
@@ -31,6 +33,13 @@ const AfterHome: React.FC = () => {
 
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    const user = localStorage.getItem("userType");
+    if (user) {
+      setUserType(JSON.parse(user));
+    }
+  }, [userEmail]);
 
   return (
     <div>
@@ -58,7 +67,7 @@ const AfterHome: React.FC = () => {
       <div className="adv">
         {advertisements &&
           advertisements.map((ad: AdvertisementData, index: number) => (
-            <AdvDisplay key={index} ads={ad} />
+            <AdvDisplay key={index} ads={ad} display={userType as CustomUser} />
           ))}
       </div>
       <hr></hr>

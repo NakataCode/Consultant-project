@@ -1,4 +1,6 @@
 export interface CustomUser {
-  email: string | null;
   displayName: string | null;
+  email: string | null;
+  needsHelp?: boolean;
+  userType?: string | null;
 }
