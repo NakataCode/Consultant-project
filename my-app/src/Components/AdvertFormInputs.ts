@@ -1,8 +1,9 @@
 export interface AdvertisementData {
-  budget: string;
+  id: string;
   createdBy: string;
-  date: string;
-  description: string;
-  images: [];
+  images: string[];
   title: string;
+  description: string;
+  budget: number;
+  date: string;
 }

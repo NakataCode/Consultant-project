@@ -1,5 +1,5 @@
-import { auth } from "../firebase";
 import "../App.css";
+import { auth } from "../firebase";
 import { CustomUser } from "./DisplayedUserData";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import React, { useState } from "react";
@@ -30,6 +30,15 @@ const User: React.FC = () => {
             {userType === "Consultant" && needsHelp
               ? "Consultant and Person who needs help"
               : userType}
+          </h3>
+        )}
+        {(userType === "Person who needs help" ||
+          (userType === "Consultant" && needsHelp)) && (
+          <h3
+            className="welcome linkUser"
+            onClick={() => navigate("/Messages_Page")}
+          >
+            Messages
           </h3>
         )}
         {needsHelp && (

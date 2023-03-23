@@ -1,7 +1,12 @@
 import { AdvertisementData } from "./AdvertFormInputs";
+import { auth } from "../firebase";
 import { CustomUser } from "./DisplayedUserData";
 import "../Styles/Adv.css";
+import { Message } from "../features/storeTypes";
+import { sendMessage } from "../features/Message";
+import { saveMessageToFirebase } from "../features/saveMessageToFirebase";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 interface AdvertisementDisplayProps {
   ads: AdvertisementData;
@@ -10,11 +15,26 @@ interface AdvertisementDisplayProps {
 
 const AdvDisplay: React.FC<AdvertisementDisplayProps> = ({ ads, display }) => {
   const [answer, setAnswer] = useState("");
+  const dispatch = useDispatch();
 
-  const handleAnswerChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setAnswer(event.target.value);
+  const handleAnswerChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAnswer(e.target.value);
+  };
+
+  const handleSubmit = async () => {
+    const createdAt = new Date();
+    const createdAtISOString = createdAt.toISOString();
+    const messageData = {
+      message: answer,
+      email: display.email,
+      sender: auth.currentUser?.email || "",
+      receiver: ads.createdBy,
+      adId: ads.id,
+      createdAt: createdAtISOString,
+    };
+    await saveMessageToFirebase(messageData);
+    dispatch(sendMessage([messageData as Message]));
+    setAnswer("");
   };
 
   return (
@@ -38,13 +58,18 @@ const AdvDisplay: React.FC<AdvertisementDisplayProps> = ({ ads, display }) => {
 
       {display.userType === "Consultant" ||
       display.userType === "Consultant and Person who needs help" ? (
-        <textarea
-          className="input-display"
-          placeholder="If you are interested, write here!"
-          value={answer}
-          onChange={handleAnswerChange}
-          required
-        />
+        <div className="adv-container-second">
+          <textarea
+            className="input-display"
+            placeholder="If you are interested, write here!"
+            value={answer}
+            onChange={handleAnswerChange}
+            required
+          />
+          <button className="go-back-second" onClick={handleSubmit}>
+            Send message
+          </button>
+        </div>
       ) : null}
     </div>
   );

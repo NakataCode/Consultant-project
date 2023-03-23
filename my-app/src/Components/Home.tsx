@@ -14,7 +14,7 @@ const Home: React.FC = () => {
       }
     });
 
-    return () => unsubscribe();
+    return unsubscribe();
   }, [navigate]);
 
   return (

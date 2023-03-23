@@ -1,5 +1,5 @@
 import { auth } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { getDownloadURL } from "firebase/storage";
 import { ref, uploadBytes } from "firebase/storage";
@@ -52,7 +52,15 @@ const Advertisement: React.FC = () => {
       }
 
       const adRef = collection(db, "ads");
-      const newAd = {
+      const newAd: {
+        title: string;
+        description: string;
+        budget: string;
+        date: string;
+        images: string[];
+        createdBy: string | null | undefined;
+        id?: string;
+      } = {
         title,
         description,
         budget,
@@ -61,8 +69,12 @@ const Advertisement: React.FC = () => {
         createdBy: auth.currentUser?.email,
       };
 
-      await addDoc(adRef, newAd);
+      const adDoc = await addDoc(adRef, newAd);
+      const adId = adDoc.id;
 
+      newAd.id = adId;
+
+      await setDoc(doc(db, "ads", adId), { id: adId }, { merge: true });
       navigate("/Home_Page");
 
       setTitle("");
