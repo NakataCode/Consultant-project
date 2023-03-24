@@ -5,6 +5,9 @@ export interface RootState {
       email: string;
     }>;
   };
+  search: {
+    query: string;
+  };
 }
 
 export interface Message {
