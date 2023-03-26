@@ -11,6 +11,7 @@ export interface RootState {
 }
 
 export interface Message {
+  id?: string;
   message: string;
   email: string | null;
   sender: string | null;
