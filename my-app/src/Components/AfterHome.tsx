@@ -1,23 +1,23 @@
-import { AdvertisementData } from "./AdvertFormInputs";
-import AdvDisplay from "./AdvDisplay";
-import { CustomUser } from "./DisplayedUserData";
+import AfterHomeView from "./AfterHomeView";
+import { AdvertisementData } from "../features/AdvertFormInputs";
+import { auth } from "../firebase";
 import { collection, onSnapshot } from "firebase/firestore";
+import { CustomUser } from "../features/DisplayedUserData";
 import { db } from "../firebase";
 import Fuse from "fuse.js";
-import { NavLink, useNavigate } from "react-router-dom";
+import { onAuthStateChanged } from "firebase/auth";
 import { RootState } from "../features/storeTypes";
-import "../Styles/Adv.css";
 import { setSearchQuery } from "../features/SearchSlice";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const AfterHome: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [advertisements, setAdvertisements] = useState<AdvertisementData[]>([]);
   const [userType, setUserType] = useState<CustomUser | []>([]);
-  const dispatch = useDispatch();
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +55,20 @@ const AfterHome: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail(null);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
     const user = localStorage.getItem("userType");
     if (user) {
       setUserType(JSON.parse(user));
@@ -62,40 +76,13 @@ const AfterHome: React.FC = () => {
   }, [userEmail]);
 
   return (
-    <div>
-      <header className="header">
-        <h1 className="logo">
-          <NavLink to="/Home_Page">-Consultant-</NavLink>
-        </h1>
-
-        <ul className="navLinks">
-          <li>
-            {userEmail && (
-              <div className="linkUser">
-                <a onClick={handleUserClick}>{userEmail}</a>
-              </div>
-            )}
-          </li>
-        </ul>
-      </header>
-      <div className="flex-2">
-        <form className="search-form form-container">
-          <input
-            placeholder="Search"
-            className="search"
-            onChange={handleSearchChange}
-          />
-        </form>
-        <hr></hr>
-      </div>
-      <div className="adv">
-        {filteredAds &&
-          filteredAds.map((ad: AdvertisementData, index: number) => (
-            <AdvDisplay key={index} ads={ad} display={userType as CustomUser} />
-          ))}
-      </div>
-      <hr></hr>
-    </div>
+    <AfterHomeView
+      userEmail={userEmail}
+      handleUserClick={handleUserClick}
+      handleSearchChange={handleSearchChange}
+      filteredAds={filteredAds}
+      userType={userType}
+    />
   );
 };
 

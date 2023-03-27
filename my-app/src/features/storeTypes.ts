@@ -1,3 +1,5 @@
+import { AdvertisementData } from "./AdvertFormInputs";
+
 export interface RootState {
   messages: {
     value: Array<{
@@ -7,6 +9,12 @@ export interface RootState {
   };
   search: {
     query: string;
+  };
+  advertisements: {
+    advertisements: AdvertisementData[];
+  };
+  auth: {
+    isSignedIn: boolean;
   };
 }
 

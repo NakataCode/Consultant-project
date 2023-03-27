@@ -6,6 +6,7 @@ import { ref, uploadBytes } from "firebase/storage";
 import "../Styles/Adv.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AdvertisementView from "./AdvertisementView";
 
 const Advertisement: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -86,60 +87,24 @@ const Advertisement: React.FC = () => {
       console.error(err);
     }
   };
+  const navigateBack = () => {
+    navigate("/user");
+  };
 
   return (
-    <div>
-      <button className="go-back" onClick={() => navigate("/user")}>
-        Go back
-      </button>
-      <div className="ad-form-container">
-        <h2>Create Advertisement:</h2>
-        <form className="ad-form" onSubmit={handleSubmit}>
-          <div className="form-field">
-            <label className="title">Title:</label>
-            <input
-              type="text"
-              value={title}
-              onChange={handleTitleChange}
-              required
-            />
-          </div>
-          <div className="form-field">
-            <label className="description">Description:</label>
-            <textarea
-              value={description}
-              onChange={handleDescriptionChange}
-              required
-            />
-          </div>
-          <div className="form-field">
-            <label className="image">Image:</label>
-            <input type="file" onChange={handleImageChange} required />
-          </div>
-          <div className="form-field">
-            <label className="date">Date:</label>
-            <input
-              type="date"
-              value={date}
-              onChange={handleDateChange}
-              required
-            />
-          </div>
-          <div className="form-field">
-            <label className="budget">Budget:</label>
-            <input
-              type="number"
-              value={budget}
-              onChange={handleBudgetChange}
-              required
-            />
-          </div>
-          <button className="adv-submit-btn" type="submit">
-            Create
-          </button>
-        </form>
-      </div>
-    </div>
+    <AdvertisementView
+      title={title}
+      description={description}
+      budget={budget}
+      date={date}
+      handleTitleChange={handleTitleChange}
+      handleDescriptionChange={handleDescriptionChange}
+      handleBudgetChange={handleBudgetChange}
+      handleDateChange={handleDateChange}
+      handleImageChange={handleImageChange}
+      handleSubmit={handleSubmit}
+      navigateBack={navigateBack}
+    />
   );
 };
 

@@ -8,6 +8,7 @@ import { sendMessage } from "../features/Message";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import MessagesView from "./MessagesView";
 
 function Messages() {
   const navigate = useNavigate();
@@ -28,6 +29,12 @@ function Messages() {
         }
       });
 
+      newMessages.sort((a, b) => {
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      });
+
       setLocalMessages(newMessages);
       dispatch(sendMessage(newMessages));
     });
@@ -46,23 +53,7 @@ function Messages() {
     };
   }, [userEmail]);
 
-  return (
-    <div>
-      <button className="go-back" onClick={() => navigate("/user")}>
-        Go back
-      </button>
-      <div className="container">
-        <h1>Messages:</h1>
-        {localMessages.map((messageData, index) => (
-          <div key={index}>
-            <p>
-              <strong>{messageData.email}:</strong> {messageData.message}
-            </p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+  return <MessagesView localMessages={localMessages} navigate={navigate} />;
 }
 
 export default Messages;

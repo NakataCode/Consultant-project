@@ -3,7 +3,7 @@ import { Message } from "./storeTypes";
 
 const initialStateValue: Message[] = [];
 
-export const userSlice = createSlice({
+export const messageSlice = createSlice({
   name: "messages",
   initialState: { value: initialStateValue },
   reducers: {
@@ -17,5 +17,5 @@ export const userSlice = createSlice({
   },
 });
 
-export const { sendMessage, clearMessages } = userSlice.actions;
-export default userSlice.reducer;
+export const { sendMessage, clearMessages } = messageSlice.actions;
+export default messageSlice.reducer;
