@@ -25,5 +25,6 @@ export interface Message {
   sender: string | null;
   receiver: string | null;
   adId: string;
+  adTitle: string;
   createdAt: string;
 }

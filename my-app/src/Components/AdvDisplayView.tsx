@@ -1,6 +1,6 @@
-import React from "react";
 import { AdvertisementData } from "../features/AdvertFormInputs";
 import { CustomUser } from "../features/DisplayedUserData";
+import React from "react";
 
 interface AdvDisplayViewProps {
   ads: AdvertisementData;
