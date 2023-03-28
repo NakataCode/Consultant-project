@@ -32,6 +32,7 @@ const AdvDisplay: React.FC<AdvertisementDisplayProps> = ({ ads, display }) => {
       sender: auth.currentUser?.email || "",
       receiver: ads.createdBy,
       adId: ads.id,
+      adTitle: ads.title,
       createdAt: createdAtISOString,
     };
     await saveMessageToFirebase(messageData);

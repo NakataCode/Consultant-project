@@ -28,7 +28,8 @@ const UserView: React.FC<UserViewProps> = ({ user, navigate, signOut }) => {
           </h3>
         )}
         {(userType === "Person who needs help" ||
-          (userType === "Consultant" && needsHelp)) && (
+          (userType === "Consultant" && needsHelp) ||
+          userType === "Consultant") && (
           <h3
             className="welcome linkUser"
             onClick={() => navigate("/Messages_Page")}

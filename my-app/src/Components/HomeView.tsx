@@ -1,7 +1,7 @@
 import { AdvertisementData } from "../features/AdvertFormInputs";
 import AdvDisplay from "./AdvDisplay";
-import Navbar from "./Navbar";
 import { CustomUser } from "../features/DisplayedUserData";
+import Navbar from "./Navbar";
 
 interface HomeViewProps {
   handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

@@ -1,3 +1,4 @@
+import AdvertisementView from "./AdvertisementView";
 import { auth } from "../firebase";
 import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db, storage } from "../firebase";
@@ -6,7 +7,6 @@ import { ref, uploadBytes } from "firebase/storage";
 import "../Styles/Adv.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AdvertisementView from "./AdvertisementView";
 
 const Advertisement: React.FC = () => {
   const [title, setTitle] = useState("");
