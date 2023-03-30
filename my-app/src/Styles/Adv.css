@@ -208,3 +208,54 @@ h2 {
   display: flex;
   justify-content: center;
 }
+.edit-button {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.5em 3em;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin-top: 1em;
+}
+.active-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 0.7em 0.7em;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9em;
+  cursor: pointer;
+  margin: 0.3em 0.3em;
+  width: 80%;
+}
+.col-btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+label > p {
+  color: white;
+}
+.center-edit-stuff {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.center-edit-stuff input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+.center-edit-stuff input[type="file"] {
+  display: none;
+}
+.image-color {
+  color: white;
+  margin-bottom: 1.4em;
+}
