@@ -28,26 +28,6 @@ const AdvDisplay: React.FC<AdvertisementDisplayProps> = ({ ads, display }) => {
     setAnswer(e.target.value);
   };
 
-  const handleSubmit = async () => {
-    const createdAt = new Date();
-    const createdAtISOString = createdAt.toISOString();
-    const messageData = {
-      message: answer,
-      email: display.email,
-      sender: auth.currentUser?.email || "",
-      receiver: ads.createdBy,
-      adId: ads.id,
-      adTitle: ads.title,
-      createdAt: createdAtISOString,
-    };
-    await saveMessageToFirebase(messageData);
-    dispatch(sendMessage([messageData as Message]));
-    setAnswer("");
-  };
-
-  const handleEditButtonClick = () => {
-    setEditing(true);
-  };
   const handleCancelChanges = () => {
     setEditing(false);
   };
@@ -79,29 +59,51 @@ const AdvDisplay: React.FC<AdvertisementDisplayProps> = ({ ads, display }) => {
     }
   };
 
+  const handleDeleteAdvert = async () => {
+    await deleteAdFromFirebase(ads.id);
+  };
+
+  const handleEditButtonClick = () => {
+    setEditing(true);
+  };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setUploadedImage(e.target.files[0]);
     }
   };
-  const handleDeleteAdvert = async () => {
-    await deleteAdFromFirebase(ads.id);
+
+  const handleSubmit = async () => {
+    const createdAt = new Date();
+    const createdAtISOString = createdAt.toISOString();
+    const messageData = {
+      message: answer,
+      email: display.email,
+      sender: auth.currentUser?.email || "",
+      receiver: ads.createdBy,
+      adId: ads.id,
+      adTitle: ads.title,
+      createdAt: createdAtISOString,
+    };
+    await saveMessageToFirebase(messageData);
+    dispatch(sendMessage([messageData as Message]));
+    setAnswer("");
   };
 
   return (
     <AdvDisplayView
       ads={ads}
-      display={display}
       answer={answer}
-      handleAnswerChange={handleAnswerChange}
-      handleSubmit={handleSubmit}
+      display={display}
       editing={editing}
-      handleEditButtonClick={handleEditButtonClick}
-      handleConfirmChanges={handleConfirmChanges}
-      handleImageChange={handleImageChange}
-      handleCancelChanges={handleCancelChanges}
       uploadedImage={uploadedImage}
+      handleAnswerChange={handleAnswerChange}
+      handleCancelChanges={handleCancelChanges}
+      handleConfirmChanges={handleConfirmChanges}
       handleDeleteAdvert={handleDeleteAdvert}
+      handleEditButtonClick={handleEditButtonClick}
+      handleImageChange={handleImageChange}
+      handleSubmit={handleSubmit}
     />
   );
 };

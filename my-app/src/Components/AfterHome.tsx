@@ -13,16 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 const AfterHome: React.FC = () => {
-  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [advertisements, setAdvertisements] = useState<AdvertisementData[]>([]);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userType, setUserType] = useState<CustomUser | []>([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchQuery(e.target.value));
-  };
 
   const fuse = new Fuse(advertisements, {
     keys: ["title", "description", "budget", "date"],
@@ -36,6 +32,10 @@ const AfterHome: React.FC = () => {
 
   const handleUserClick = () => {
     navigate("/user");
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchQuery(e.target.value));
   };
 
   useEffect(() => {
@@ -77,11 +77,11 @@ const AfterHome: React.FC = () => {
 
   return (
     <AfterHomeView
-      userEmail={userEmail}
-      handleUserClick={handleUserClick}
-      handleSearchChange={handleSearchChange}
       filteredAds={filteredAds}
+      userEmail={userEmail}
       userType={userType}
+      handleSearchChange={handleSearchChange}
+      handleUserClick={handleUserClick}
     />
   );
 };

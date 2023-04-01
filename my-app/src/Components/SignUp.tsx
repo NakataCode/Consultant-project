@@ -12,20 +12,14 @@ import SignUpView from "./SignUpView";
 const SignUp: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [userType, setUserType] = useState("");
   const [needsHelp, setNeedsHelp] = useState(false);
+  const [userType, setUserType] = useState("");
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) navigate("/Home_Page");
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, [navigate]);
+  const handleNeedsHelpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNeedsHelp(e.target.checked);
+  };
 
   const handleSignUp = async () => {
     try {
@@ -71,19 +65,25 @@ const SignUp: React.FC = () => {
     setUserType(e.target.value);
   };
 
-  const handleNeedsHelpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNeedsHelp(e.target.checked);
-  };
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) navigate("/Home_Page");
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [navigate]);
 
   return (
     <SignUpView
-      userType={userType}
       needsHelp={needsHelp}
+      userType={userType}
       setEmail={setEmail}
       setPassword={setPassword}
+      handleNeedsHelpChange={handleNeedsHelpChange}
       handleSignUp={handleSignUp}
       handleUserTypeChange={handleUserTypeChange}
-      handleNeedsHelpChange={handleNeedsHelpChange}
     />
   );
 };

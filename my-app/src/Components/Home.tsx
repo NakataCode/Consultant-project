@@ -21,9 +21,23 @@ const Home: React.FC = () => {
     (state: RootState) => state.advertisements.advertisements
   );
 
+  const fuse = new Fuse(advertisements, {
+    keys: ["title", "description", "budget", "date"],
+    threshold: 0.3,
+  });
+
+  const searchQuery = useSelector((state: RootState) => state.search.query);
+  const filteredAds = searchQuery
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : advertisements;
+
   const userType: CustomUser = useSelector((state: RootState) =>
     JSON.parse(localStorage.getItem("userType") || "{}")
   );
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchQuery(e.target.value));
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -44,20 +58,6 @@ const Home: React.FC = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchQuery(e.target.value));
-  };
-
-  const fuse = new Fuse(advertisements, {
-    keys: ["title", "description", "budget", "date"],
-    threshold: 0.3,
-  });
-
-  const searchQuery = useSelector((state: RootState) => state.search.query);
-  const filteredAds = searchQuery
-    ? fuse.search(searchQuery).map((result) => result.item)
-    : advertisements;
-
   useEffect(() => {
     dispatch(setSignedIn(!!userType));
   }, [dispatch, userType]);
@@ -77,9 +77,9 @@ const Home: React.FC = () => {
 
   return (
     <HomeView
-      handleSearchChange={handleSearchChange}
       filteredAds={filteredAds}
       userType={userType}
+      handleSearchChange={handleSearchChange}
     />
   );
 };

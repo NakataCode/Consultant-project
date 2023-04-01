@@ -1,6 +1,6 @@
 import AdvertisementView from "./AdvertisementView";
 import { auth } from "../firebase";
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { getDownloadURL } from "firebase/storage";
 import { ref, uploadBytes } from "firebase/storage";
@@ -9,22 +9,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Advertisement: React.FC = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
   const [budget, setBudget] = useState("");
   const [date, setDate] = useState("");
+  const [description, setDescription] = useState("");
   const [images, setImages] = useState<File[]>([]);
+  const [title, setTitle] = useState("");
   const navigate = useNavigate();
-
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
-  const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setDescription(event.target.value);
-  };
 
   const handleBudgetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setBudget(event.target.value);
@@ -32,6 +22,12 @@ const Advertisement: React.FC = () => {
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
+  };
+
+  const handleDescriptionChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setDescription(event.target.value);
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,19 +87,23 @@ const Advertisement: React.FC = () => {
     navigate("/user");
   };
 
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
   return (
     <AdvertisementView
-      title={title}
-      description={description}
       budget={budget}
       date={date}
-      handleTitleChange={handleTitleChange}
-      handleDescriptionChange={handleDescriptionChange}
+      description={description}
+      navigateBack={navigateBack}
+      title={title}
       handleBudgetChange={handleBudgetChange}
       handleDateChange={handleDateChange}
+      handleDescriptionChange={handleDescriptionChange}
       handleImageChange={handleImageChange}
       handleSubmit={handleSubmit}
-      navigateBack={navigateBack}
+      handleTitleChange={handleTitleChange}
     />
   );
 };

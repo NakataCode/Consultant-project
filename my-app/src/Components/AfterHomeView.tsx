@@ -5,19 +5,19 @@ import { NavLink } from "react-router-dom";
 import "../Styles/Adv.css";
 
 interface AfterHomeViewProps {
-  userEmail: string | null;
-  handleUserClick: () => void;
-  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   filteredAds: AdvertisementData[];
+  userEmail: string | null;
   userType: CustomUser | [];
+  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleUserClick: () => void;
 }
 
 const AfterHomeView: React.FC<AfterHomeViewProps> = ({
-  userEmail,
-  handleUserClick,
-  handleSearchChange,
   filteredAds,
+  userEmail,
   userType,
+  handleSearchChange,
+  handleUserClick,
 }) => {
   return (
     <div>

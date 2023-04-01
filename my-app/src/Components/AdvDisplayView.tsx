@@ -6,12 +6,12 @@ import "../Styles/Adv.css";
 
 interface AdvDisplayViewProps {
   ads: AdvertisementData;
-  display: CustomUser;
   answer: string;
-  handleAnswerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSubmit: () => Promise<void>;
+  display: CustomUser;
   editing: boolean;
-  handleEditButtonClick: () => void;
+  uploadedImage: File | null;
+  handleAnswerChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleCancelChanges: () => void;
   handleConfirmChanges: (
     title: string,
     image: File | null,
@@ -19,24 +19,25 @@ interface AdvDisplayViewProps {
     budget: number,
     date: string
   ) => Promise<void>;
-  handleCancelChanges: () => void;
-  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  uploadedImage: File | null;
   handleDeleteAdvert: () => Promise<void>;
+  handleEditButtonClick: () => void;
+  handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSubmit: () => Promise<void>;
 }
 
 const AdvDisplayView: React.FC<AdvDisplayViewProps> = ({
   ads,
-  display,
   answer,
-  handleAnswerChange,
-  handleSubmit,
+  display,
   editing,
-  handleEditButtonClick,
-  handleConfirmChanges,
-  handleCancelChanges,
-  handleImageChange,
   uploadedImage,
+  handleAnswerChange,
+  handleCancelChanges,
+  handleConfirmChanges,
+  handleEditButtonClick,
+  handleSubmit,
+
+  handleImageChange,
   handleDeleteAdvert,
 }) => {
   const loggedInUser = auth.currentUser;

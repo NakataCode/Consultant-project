@@ -3,8 +3,8 @@ import { AdvertisementData } from "./AdvertFormInputs";
 export interface RootState {
   messages: {
     value: Array<{
-      message: string;
       email: string;
+      message: string;
     }>;
   };
   search: {
@@ -19,12 +19,12 @@ export interface RootState {
 }
 
 export interface Message {
-  id?: string;
-  message: string;
-  email: string | null;
-  sender: string | null;
-  receiver: string | null;
   adId: string;
   adTitle: string;
   createdAt: string;
+  email: string | null;
+  id?: string;
+  message: string;
+  receiver: string | null;
+  sender: string | null;
 }

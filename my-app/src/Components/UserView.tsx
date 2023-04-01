@@ -3,14 +3,14 @@ import { NavigateFunction } from "react-router-dom";
 import React from "react";
 
 interface UserViewProps {
-  user: CustomUser | null;
   navigate: NavigateFunction;
+  user: CustomUser | null;
   signOut: () => void;
 }
 
-const UserView: React.FC<UserViewProps> = ({ user, navigate, signOut }) => {
-  const userType = user?.displayName && JSON.parse(user.displayName).userType;
+const UserView: React.FC<UserViewProps> = ({ navigate, user, signOut }) => {
   const needsHelp = user?.displayName && JSON.parse(user.displayName).needsHelp;
+  const userType = user?.displayName && JSON.parse(user.displayName).userType;
 
   return (
     <div>

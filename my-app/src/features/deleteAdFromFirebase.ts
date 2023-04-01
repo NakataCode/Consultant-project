@@ -1,4 +1,4 @@
-import { doc, deleteDoc, getFirestore } from "firebase/firestore";
+import { deleteDoc, doc, getFirestore } from "firebase/firestore";
 
 const db = getFirestore();
 

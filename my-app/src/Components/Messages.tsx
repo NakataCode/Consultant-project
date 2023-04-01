@@ -13,13 +13,29 @@ import { useEffect, useState } from "react";
 import "../Styles/Messages.css";
 
 function Messages() {
+  const [localMessages, setLocalMessages] = useState<Message[]>([]);
   const [showResponseArea, setShowResponseArea] = useState<number | null>(null);
   const [responseText, setResponseText] = useState<string[]>([]);
 
+  const userEmail = auth.currentUser?.email || "";
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [localMessages, setLocalMessages] = useState<Message[]>([]);
-  const userEmail = auth.currentUser?.email || "";
+
+  const handleDeleteMessage = async (messageId: string) => {
+    await deleteMessageFromFirebase(messageId);
+    setLocalMessages(
+      localMessages.filter((message) => message.id !== messageId)
+    );
+  };
+  const handleResponseTextChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+    index: number
+  ) => {
+    const newResponseText = [...responseText];
+    newResponseText[index] = e.target.value;
+    setResponseText(newResponseText);
+  };
 
   const fetchMessages = () => {
     const messagesRef = collection(db, "messages");
@@ -51,20 +67,6 @@ function Messages() {
     return unsubscribe;
   };
 
-  useEffect(() => {
-    const unsubscribeMessages = fetchMessages();
-
-    return () => {
-      if (unsubscribeMessages) {
-        unsubscribeMessages();
-      }
-      dispatch(clearMessages());
-    };
-  }, [userEmail]);
-  const handleRespondClick = (index: number) => {
-    setShowResponseArea((prevState) => (prevState === index ? null : index));
-  };
-
   const handleSendResponse = async (
     messageData: Message,
     responseIndex: number
@@ -89,31 +91,30 @@ function Messages() {
     );
   };
 
-  const handleDeleteMessage = async (messageId: string) => {
-    await deleteMessageFromFirebase(messageId);
-    setLocalMessages(
-      localMessages.filter((message) => message.id !== messageId)
-    );
-  };
-  const handleResponseTextChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>,
-    index: number
-  ) => {
-    const newResponseText = [...responseText];
-    newResponseText[index] = e.target.value;
-    setResponseText(newResponseText);
+  useEffect(() => {
+    const unsubscribeMessages = fetchMessages();
+
+    return () => {
+      if (unsubscribeMessages) {
+        unsubscribeMessages();
+      }
+      dispatch(clearMessages());
+    };
+  }, [userEmail]);
+  const handleRespondClick = (index: number) => {
+    setShowResponseArea((prevState) => (prevState === index ? null : index));
   };
 
   return (
     <MessagesView
       localMessages={localMessages}
       navigate={navigate}
-      showResponseArea={showResponseArea}
       responseText={responseText}
-      handleRespondClick={handleRespondClick}
-      handleSendResponse={handleSendResponse}
       handleDeleteMessage={handleDeleteMessage}
+      showResponseArea={showResponseArea}
+      handleRespondClick={handleRespondClick}
       handleResponseTextChange={handleResponseTextChange}
+      handleSendResponse={handleSendResponse}
     />
   );
 }

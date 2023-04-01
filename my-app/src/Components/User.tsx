@@ -22,7 +22,7 @@ const User: React.FC = () => {
   }, [navigate]);
 
   return (
-    <UserView user={user} navigate={navigate} signOut={() => signOut(auth)} />
+    <UserView navigate={navigate} user={user} signOut={() => signOut(auth)} />
   );
 };
 

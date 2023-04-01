@@ -1,18 +1,18 @@
-import { AdvertisementData } from "../features/AdvertFormInputs";
 import AdvDisplay from "./AdvDisplay";
+import { AdvertisementData } from "../features/AdvertFormInputs";
 import { CustomUser } from "../features/DisplayedUserData";
 import Navbar from "./Navbar";
 
 interface HomeViewProps {
-  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   filteredAds: AdvertisementData[];
   userType: CustomUser | [];
+  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const HomeView: React.FC<HomeViewProps> = ({
-  handleSearchChange,
   filteredAds,
   userType,
+  handleSearchChange,
 }) => {
   return (
     <div>

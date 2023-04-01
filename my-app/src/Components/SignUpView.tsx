@@ -2,23 +2,23 @@ import { Link } from "react-router-dom";
 import React from "react";
 
 interface SignUpViewProps {
-  userType: string;
   needsHelp: boolean;
+  userType: string;
   setEmail: (email: string) => void;
   setPassword: (password: string) => void;
+  handleNeedsHelpChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSignUp: () => void;
   handleUserTypeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleNeedsHelpChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const SignUpView: React.FC<SignUpViewProps> = ({
-  userType,
   needsHelp,
+  userType,
   setEmail,
   setPassword,
+  handleNeedsHelpChange,
   handleSignUp,
   handleUserTypeChange,
-  handleNeedsHelpChange,
 }) => {
   return (
     <div>

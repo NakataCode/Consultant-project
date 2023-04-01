@@ -6,29 +6,29 @@ import "../Styles/Adv.css";
 interface MessagesViewProps {
   localMessages: Message[];
   navigate: NavigateFunction;
-  showResponseArea: number | null;
   responseText: string[];
-  handleRespondClick: (index: number) => void;
-  handleSendResponse: (
-    messageData: Message,
-    responseIndex: number
-  ) => Promise<void>;
+  showResponseArea: number | null;
   handleDeleteMessage: (messageId: string) => Promise<void>;
+  handleRespondClick: (index: number) => void;
   handleResponseTextChange: (
     e: React.ChangeEvent<HTMLTextAreaElement>,
     index: number
   ) => void;
+  handleSendResponse: (
+    messageData: Message,
+    responseIndex: number
+  ) => Promise<void>;
 }
 
 const MessagesView: React.FC<MessagesViewProps> = ({
   localMessages,
   navigate,
-  showResponseArea,
   responseText,
-  handleRespondClick,
-  handleSendResponse,
   handleDeleteMessage,
+  showResponseArea,
+  handleRespondClick,
   handleResponseTextChange,
+  handleSendResponse,
 }) => {
   return (
     <div>

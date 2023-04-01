@@ -1,33 +1,33 @@
 import React from "react";
 
 interface AdvertisementViewProps {
-  title: string;
-  description: string;
   budget: string;
   date: string;
-  handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  description: string;
+  title: string;
+  navigateBack: () => void;
+  handleBudgetChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDateChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDescriptionChange: (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => void;
-  handleBudgetChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDateChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleImageChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  navigateBack: () => void;
+  handleTitleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const AdvertisementView: React.FC<AdvertisementViewProps> = ({
-  title,
-  description,
   budget,
   date,
-  handleTitleChange,
-  handleDescriptionChange,
+  description,
+  title,
+  navigateBack,
   handleBudgetChange,
   handleDateChange,
+  handleDescriptionChange,
   handleImageChange,
   handleSubmit,
-  navigateBack,
+  handleTitleChange,
 }) => {
   return (
     <div>
