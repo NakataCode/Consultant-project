@@ -2,6 +2,7 @@ import AdvertReducer from "./features/AdvertSlice";
 import AuthReducer from "./features/AuthSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import messagesReducer from "./features/Message";
+import refreshReducer from "./features/refreshSlice";
 import searchReducer from "./features/SearchSlice";
 
 const store = configureStore({
@@ -10,6 +11,7 @@ const store = configureStore({
     auth: AuthReducer,
     messages: messagesReducer,
     search: searchReducer,
+    refresh: refreshReducer,
   },
 });
 

@@ -16,6 +16,9 @@ export interface RootState {
   auth: {
     isSignedIn: boolean;
   };
+  refresh: {
+    key: number;
+  };
 }
 
 export interface Message {

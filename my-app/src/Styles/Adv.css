@@ -259,3 +259,6 @@ label > p {
   color: white;
   margin-bottom: 1.4em;
 }
+.not-found-message {
+  color: white;
+}

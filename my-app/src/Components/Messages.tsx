@@ -101,6 +101,7 @@ function Messages() {
       dispatch(clearMessages());
     };
   }, [userEmail]);
+
   const handleRespondClick = (index: number) => {
     setShowResponseArea((prevState) => (prevState === index ? null : index));
   };

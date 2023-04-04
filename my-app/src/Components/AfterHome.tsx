@@ -1,7 +1,7 @@
 import AfterHomeView from "./AfterHomeView";
 import { AdvertisementData } from "../features/AdvertFormInputs";
 import { auth } from "../firebase";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
 import { CustomUser } from "../features/DisplayedUserData";
 import { db } from "../firebase";
 import Fuse from "fuse.js";
@@ -16,6 +16,8 @@ const AfterHome: React.FC = () => {
   const [advertisements, setAdvertisements] = useState<AdvertisementData[]>([]);
   const [userEmail, setUserEmail] = useState<string | null>(null);
   const [userType, setUserType] = useState<CustomUser | []>([]);
+
+  const refreshKey = useSelector((state: RootState) => state.refresh.key);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -46,13 +48,16 @@ const AfterHome: React.FC = () => {
   }, [userEmail]);
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(collection(db, "ads"), (snapshot) => {
-      const ads = snapshot.docs.map((doc) => doc.data() as AdvertisementData);
+    const fetchAdvertisements = async () => {
+      const querySnapshot = await getDocs(collection(db, "ads"));
+      const ads = querySnapshot.docs.map(
+        (doc) => doc.data() as AdvertisementData
+      );
       setAdvertisements(ads);
-    });
+    };
 
-    return unsubscribe;
-  }, []);
+    fetchAdvertisements();
+  }, [refreshKey]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {

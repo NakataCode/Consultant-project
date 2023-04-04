@@ -55,8 +55,15 @@ const AdvertisementView: React.FC<AdvertisementViewProps> = ({
             />
           </div>
           <div className="form-field">
-            <label className="image">Image:</label>
-            <input type="file" onChange={handleImageChange} required />
+            <label className="custom-file-input">
+              <input
+                type="file"
+                name="image"
+                id="image"
+                onChange={handleImageChange}
+                required
+              />
+            </label>
           </div>
           <div className="form-field">
             <label className="date">Date:</label>

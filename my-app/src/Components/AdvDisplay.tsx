@@ -5,6 +5,7 @@ import { CustomUser } from "../features/DisplayedUserData";
 import { deleteAdFromFirebase } from "../features/deleteAdFromFirebase";
 import "../Styles/Adv.css";
 import { Message } from "../features/storeTypes";
+import { updateRefreshKey } from "../features/refreshSlice";
 import { sendMessage } from "../features/Message";
 import { saveMessageToFirebase } from "../features/saveMessageToFirebase";
 import { useState } from "react";
@@ -61,6 +62,7 @@ const AdvDisplay: React.FC<AdvertisementDisplayProps> = ({ ads, display }) => {
 
   const handleDeleteAdvert = async () => {
     await deleteAdFromFirebase(ads.id);
+    dispatch(updateRefreshKey());
   };
 
   const handleEditButtonClick = () => {

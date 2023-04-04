@@ -47,10 +47,13 @@ const AfterHomeView: React.FC<AfterHomeViewProps> = ({
         <hr></hr>
       </div>
       <div className="adv">
-        {filteredAds &&
+        {filteredAds.length > 0 ? (
           filteredAds.map((ad: AdvertisementData, index: number) => (
             <AdvDisplay key={index} ads={ad} display={userType as CustomUser} />
-          ))}
+          ))
+        ) : (
+          <div className="not-found-message">Not found</div>
+        )}
       </div>
       <hr></hr>
     </div>

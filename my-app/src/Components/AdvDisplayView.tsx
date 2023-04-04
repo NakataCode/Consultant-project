@@ -65,6 +65,7 @@ const AdvDisplayView: React.FC<AdvDisplayViewProps> = ({
       )}
 
       {!editing &&
+      loggedInUser?.email !== ads.createdBy &&
       (display.userType === "Consultant" ||
         display.userType === "Consultant and Person who needs help") ? (
         <div className="adv-container-second">
