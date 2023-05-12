@@ -123,6 +123,7 @@ a:hover {
   background-color: #49d273;
 }
 section {
+  color: black;
   max-width: 300px;
   margin: 10px auto;
   padding: 10px 20px;

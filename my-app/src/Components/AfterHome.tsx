@@ -1,19 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import "../App.css";
+import AfterHomeView from "./AfterHomeView";
+import { AdvertisementData } from "../features/AdvertFormInputs";
+import { auth } from "../firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { CustomUser } from "../features/DisplayedUserData";
+import { db } from "../firebase";
+import Fuse from "fuse.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { RootState } from "../features/storeTypes";
+import { setSearchQuery } from "../features/SearchSlice";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const HomePage: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+const AfterHome: React.FC = () => {
+  const [advertisements, setAdvertisements] = useState<AdvertisementData[]>([]);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userType, setUserType] = useState<CustomUser | []>([]);
 
+  const refreshKey = useSelector((state: RootState) => state.refresh.key);
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleSearch = (event: React.FormEvent) => {
-    event.preventDefault();
-  };
+  const fuse = new Fuse(advertisements, {
+    keys: ["title", "description", "budget", "date"],
+    threshold: 0.3,
+  });
+
+  const searchQuery = useSelector((state: RootState) => state.search.query);
+  const filteredAds = searchQuery
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : advertisements;
 
   const handleUserClick = () => {
     navigate("/user");
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSearchQuery(e.target.value));
   };
 
   useEffect(() => {
@@ -21,38 +45,50 @@ const HomePage: React.FC = () => {
     if (email) {
       setUserEmail(email);
     }
+  }, [userEmail]);
+
+  useEffect(() => {
+    const fetchAdvertisements = async () => {
+      const querySnapshot = await getDocs(collection(db, "ads"));
+      const ads = querySnapshot.docs.map(
+        (doc) => doc.data() as AdvertisementData
+      );
+      setAdvertisements(ads);
+    };
+
+    fetchAdvertisements();
+  }, [refreshKey]);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail(null);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
-  return (
-    <div>
-      <header className="header">
-        <h1 className="logo">
-          <NavLink to="/Home_Page">-Consultant-</NavLink>
-        </h1>
+  useEffect(() => {
+    const user = localStorage.getItem("userType");
+    if (user) {
+      setUserType(JSON.parse(user));
+    }
+  }, [userEmail]);
 
-        <ul className="navLinks">
-          <li>
-            {userEmail && (
-              <div className="linkUser">
-                <a onClick={handleUserClick}>{userEmail}</a>
-              </div>
-            )}
-          </li>
-        </ul>
-      </header>
-      <div className="flex-2">
-        <form className="search-form form-container " onSubmit={handleSearch}>
-          <input
-            placeholder="Search"
-            className="search"
-            value={searchTerm}
-            onChange={(event) => setSearchTerm(event.target.value)}
-          />
-        </form>
-        <hr></hr>
-      </div>
-    </div>
+  return (
+    <AfterHomeView
+      filteredAds={filteredAds}
+      userEmail={userEmail}
+      userType={userType}
+      handleSearchChange={handleSearchChange}
+      handleUserClick={handleUserClick}
+    />
   );
 };
 
-export default HomePage;
+export default AfterHome;

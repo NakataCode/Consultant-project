@@ -1,20 +1,27 @@
-import React, { useState } from "react";
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
+import AdvertisementView from "./AdvertisementView";
+import { auth } from "../firebase";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { db, storage } from "../firebase";
 import { getDownloadURL } from "firebase/storage";
+import { ref, uploadBytes } from "firebase/storage";
 import "../Styles/Adv.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CreateAd: React.FC = () => {
-  const [title, setTitle] = useState("");
+const Advertisement: React.FC = () => {
+  const [budget, setBudget] = useState("");
+  const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
   const [images, setImages] = useState<File[]>([]);
-  const [date, setDate] = useState("");
-  const [budget, setBudget] = useState("");
+  const [title, setTitle] = useState("");
   const navigate = useNavigate();
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
+  const handleBudgetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBudget(event.target.value);
+  };
+
+  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setDate(event.target.value);
   };
 
   const handleDescriptionChange = (
@@ -24,99 +31,81 @@ const CreateAd: React.FC = () => {
   };
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const fileList = event.target.files;
-    if (fileList) {
-      setImages(Array.from(fileList));
+    if (event.target.files) {
+      setImages(Array.from(event.target.files));
     }
   };
 
-  const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const imageRefs: string[] = [];
+      for (const image of images) {
+        const storageRef = ref(storage, `images/${image.name}`);
+        await uploadBytes(storageRef, image);
+        const imageUrl = await getDownloadURL(storageRef);
+        imageRefs.push(imageUrl);
+      }
+
+      const adRef = collection(db, "ads");
+      const newAd: {
+        title: string;
+        description: string;
+        budget: string;
+        date: string;
+        images: string[];
+        createdBy: string | null | undefined;
+        id?: string;
+      } = {
+        title,
+        description,
+        budget,
+        date,
+        images: imageRefs,
+        createdBy: auth.currentUser?.email,
+      };
+
+      const adDoc = await addDoc(adRef, newAd);
+      const adId = adDoc.id;
+
+      newAd.id = adId;
+
+      await setDoc(doc(db, "ads", adId), { id: adId }, { merge: true });
+      navigate("/Home_Page");
+
+      setTitle("");
+      setDescription("");
+      setBudget("");
+      setDate("");
+      setImages([]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const navigateBack = () => {
+    navigate("/user");
   };
 
-  const handleBudgetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBudget(event.target.value);
-  };
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (
-      title.trim() === "" ||
-      description.trim() === "" ||
-      images.length === 0 ||
-      date.trim() === "" ||
-      budget.trim() === ""
-    ) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-
-    const storage = getStorage();
-    const firestore = getFirestore();
-
-    const imageUrls: string[] = [];
-
-    for (let i = 0; i < images.length; i++) {
-      const image = images[i];
-      const storageRef = ref(storage, `images/${image.name}`);
-      await uploadBytes(storageRef, image);
-      const imageUrl = await getDownloadURL(storageRef);
-      imageUrls.push(imageUrl);
-    }
-
-    const adData = {
-      title,
-      description,
-      images: imageUrls,
-      date,
-      budget,
-    };
-
-    await addDoc(collection(firestore, "ads"), adData);
-
-    setTitle("");
-    setDescription("");
-    setImages([]);
-    setDate("");
-    setBudget("");
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
   };
 
   return (
-    <div>
-      <button className="go-back" onClick={() => navigate("/user")}>
-        Go back
-      </button>
-      <div className="ad-form-container">
-        <h2>Create Advertisement:</h2>
-        <form className="ad-form" onSubmit={handleSubmit}>
-          <div className="form-field">
-            <label className="title">Title:</label>
-            <input type="text" value={title} onChange={handleTitleChange} />
-          </div>
-          <div className="form-field">
-            <label className="description">Description:</label>
-            <textarea value={description} onChange={handleDescriptionChange} />
-          </div>
-          <div className="form-field">
-            <label className="image">Image:</label>
-            <input type="file" onChange={handleImageChange} />
-          </div>
-          <div className="form-field">
-            <label className="date">Date:</label>
-            <input type="date" value={date} onChange={handleDateChange} />
-          </div>
-          <div className="form-field">
-            <label className="budget">Budget:</label>
-            <input type="number" value={budget} onChange={handleBudgetChange} />
-          </div>
-          <button onClick={handleSubmit} type="submit">
-            Create
-          </button>
-        </form>
-      </div>
-    </div>
+    <AdvertisementView
+      budget={budget}
+      date={date}
+      description={description}
+      navigateBack={navigateBack}
+      title={title}
+      handleBudgetChange={handleBudgetChange}
+      handleDateChange={handleDateChange}
+      handleDescriptionChange={handleDescriptionChange}
+      handleImageChange={handleImageChange}
+      handleSubmit={handleSubmit}
+      handleTitleChange={handleTitleChange}
+    />
   );
 };
 
-export default CreateAd;
+export default Advertisement;
